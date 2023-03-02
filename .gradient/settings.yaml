@@ -1,0 +1,10 @@
+integrations:
+  poplar-executables-pytorch-3-1:
+    type: dataset
+    ref: paperspace/dszxu7bmykjs7j0:6gd1pi5
+  squad:
+    type: dataset
+    ref: paperspace/dsw2jrzd591wjrw:t6nyw3u
+  ogbl_wikikg2_custom:
+    type: dataset
+    ref: paperspace/ds5fogtxxi0h935:wqp02u5
