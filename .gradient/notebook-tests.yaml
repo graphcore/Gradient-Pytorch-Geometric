@@ -12,3 +12,45 @@ Graphcore-Pytorch-Geometric-README_first:
 #     file: walkthrough.ipynb
 #     timeout: 1200
 #   requirements_file: requirements.txt
+
+pyg-cluster-GCN:
+  location: ../large-graph-node-classification/
+  generated: true
+  notebook:
+    file: node_classification_with_cluster_gcn.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt
+
+pyg-message-passing:
+  location: ../molecular-property-prediction
+  generated: true
+  notebook:
+    file: graph_classification_with_gin.ipynb
+    timeout: 1200
+  # requirements_file: requirements.txt  
+
+pyg-schnet:
+  location: ../molecular-property-prediction
+  generated: true
+  notebook:
+    file: molecular_property_prediction_with_schnet.ipynb
+    timeout: 1200
+  # requirements_file: requirements.txt  
+
+pyg-schnet:
+  location: ../molecular-property-prediction
+  generated: true
+  notebook:
+    file: molecular_property_prediction_with_schnet.ipynb
+    timeout: 1200
+  # requirements_file: requirements.txt  
+
+pyg-schnet:
+  location: ../molecular-property-prediction
+  generated: true
+  notebook:
+    file: molecular_property_prediction_with_schnet.ipynb
+    timeout: 1200
+  # requirements_file: requirements.txt  
+
+
