@@ -2,6 +2,6 @@ integrations:
   poplar-executables-pyg-3-2:
     type: dataset
     ref: paperspace/dszxu7bmykjs7j0:6gd1pi5
-  # squad:
-  #   type: dataset
-  #   ref: paperspace/dsw2jrzd591wjrw:t6nyw3u
+  PyG-placeholder-dataset:
+    type: dataset
+    ref: paperspace/dsw2jrzd591wjrw:t6nyw3u
