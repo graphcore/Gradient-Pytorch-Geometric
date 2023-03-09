@@ -22,35 +22,19 @@ pyg-cluster-GCN:
   requirements_file: requirements.txt
 
 pyg-message-passing:
-  location: ../molecular-property-prediction
+  location: ../molecular-property-prediction/gin
   generated: true
   notebook:
     file: graph_classification_with_gin.ipynb
     timeout: 1200
-  # requirements_file: requirements.txt  
+  requirements_file: requirements.txt  
 
 pyg-schnet:
-  location: ../molecular-property-prediction
+  location: ../molecular-property-prediction/schnet
   generated: true
   notebook:
     file: molecular_property_prediction_with_schnet.ipynb
     timeout: 1200
-  # requirements_file: requirements.txt  
-
-pyg-schnet:
-  location: ../molecular-property-prediction
-  generated: true
-  notebook:
-    file: molecular_property_prediction_with_schnet.ipynb
-    timeout: 1200
-  # requirements_file: requirements.txt  
-
-pyg-schnet:
-  location: ../molecular-property-prediction
-  generated: true
-  notebook:
-    file: molecular_property_prediction_with_schnet.ipynb
-    timeout: 1200
-  # requirements_file: requirements.txt  
+  requirements_file: requirements.txt  
 
 
