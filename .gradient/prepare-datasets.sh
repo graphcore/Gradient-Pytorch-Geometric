@@ -30,8 +30,14 @@ echo "Starting preparation of datasets"
 # symlink exe_cache files
 exe_cache_source_dir="${PUBLIC_DATASET_DIR}/poplar-executables-pyg-3-2"
 symlink-public-resources "${exe_cache_source_dir}" $POPLAR_EXECUTABLE_CACHE_DIR
-# Symlink Datasets
-symlink-public-resources "${PUBLIC_DATASET_DIR}/PyG-placeholder-dataset/"
+# Symlink Datasets Cora  FB15k-237 qm9  Reddit  TUDataset
+
+PYG_DATASETS="Cora  FB15k-237 qm9  Reddit  TUDataset"
+for dataset in ${PYG_DATASETS}; do
+    # symlink the actual datasets
+    symlink-public-resources "${PUBLIC_DATASET_DIR}/${dataset}" "${PYG_DATASETS_CACHE}/$(basename ${dataset})"
+done
+
 
 echo "Finished running setup.sh."
 # Run automated test if specified
