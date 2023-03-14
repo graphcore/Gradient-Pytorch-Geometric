@@ -25,7 +25,7 @@ pyg-message-passing:
   location: ../molecular-property-prediction/gin
   generated: true
   notebook:
-    file: graph_classification_with_gin.ipynb
+    file: molecular_property_prediction_with_gin.ipynb
     timeout: 1200
   requirements_file: requirements.txt  
 
