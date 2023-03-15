@@ -37,6 +37,14 @@ pyg-schnet:
     timeout: 1200
   requirements_file: requirements.txt  
 
+pyg-tgn:
+  location: ../temporal-graph-networks
+  generated: true
+  notebook:
+    file: Train_TGN.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
 # tutorials
 
 pyg-tut1:
