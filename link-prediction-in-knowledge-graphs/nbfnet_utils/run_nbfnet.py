@@ -206,7 +206,7 @@ if __name__ == "__main__":
         logger.info(f"{name}: Shape {list(param.size())} ({param.numel()} parameters), " f"{param.dtype}")
     logger.info(f"{num_params} total parameters")
 
-    for epoch in range(math.ceil(config.execution.num_epochs / config.execution.num_partitionings)):
+    for epoch in range(config.execution.num_epochs):
         t_start = time.time()
         loss = training(model_train, dataloader["train"], optim, args.device)
         dur = time.time() - t_start
@@ -217,7 +217,7 @@ if __name__ == "__main__":
                 "Duration (train) [s]": dur,
                 "Throughput (train) [triples/s]": len(dataset[0].target_edge_type) / dur,
             },
-            epoch=(epoch + 1) * config.execution.num_partitionings,
+            epoch=epoch + 1,
             partition="train",
         )
         if config.execution.do_valid:
@@ -235,7 +235,7 @@ if __name__ == "__main__":
                     "Duration (valid) [s]": dur,
                     "Throughput (valid) [triples/s]": len(dataset[1].target_edge_type) / dur,
                 },
-                epoch=(epoch + 1) * config.execution.num_partitionings,
+                epoch=epoch + 1,
                 partition="validation",
             )
 
@@ -254,6 +254,6 @@ if __name__ == "__main__":
                 "Duration (test) [s]": dur,
                 "Throughput (test) [triples/s]": len(dataset[2].target_edge_type) / dur,
             },
-            epoch=(epoch + 1) * config.execution.num_partitionings,
+            epoch=epoch + 1,
             partition="test",
         )
