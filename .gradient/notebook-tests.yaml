@@ -38,7 +38,7 @@ pyg-tgn:
   requirements_file: requirements.txt  
 
 pyg-nbfnet:
-  location: ../link-prediction/NBFNet-in-knowledge-graphs
+  location: ../link-prediction/NBFNet-for-knowledge-graphs
   generated: true
   notebook:
     file: NBFNet_training.ipynb
