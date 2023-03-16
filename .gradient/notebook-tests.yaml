@@ -4,14 +4,6 @@ Graphcore-Pytorch-Geometric-README_first:
   notebook:
     file: README_first.ipynb
 
-# Template
-# tutorial-basics-walkthrough:
-#   location: ../learning-PyTorch-on-IPU/basics
-#   generated: true
-#   notebook:
-#     file: walkthrough.ipynb
-#     timeout: 1200
-#   requirements_file: requirements.txt
 
 pyg-cluster-GCN:
   location: ../node-prediction
@@ -52,6 +44,15 @@ pyg-nbfnet:
     file: NBFNet_training.ipynb
     timeout: 1200
   requirements_file: requirements.txt  
+
+pyg-benchmarks:
+  location: ../benchmarks
+  generated: true
+  notebook:
+    file: benchmarking_gnn_on_ipus.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
 # tutorials
 
 pyg-tut1:
