@@ -14,7 +14,7 @@ Graphcore-Pytorch-Geometric-README_first:
 #   requirements_file: requirements.txt
 
 pyg-cluster-GCN:
-  location: ../large-graph-node-classification/
+  location: ../node-prediction
   generated: true
   notebook:
     file: cluster_gcn_training.ipynb
@@ -22,7 +22,7 @@ pyg-cluster-GCN:
   requirements_file: requirements.txt
 
 pyg-message-passing:
-  location: ../molecular-property-prediction/gin
+  location: ../graph-prediction/gin-molecular-prediction
   generated: true
   notebook:
     file: gin_training.ipynb
@@ -30,7 +30,7 @@ pyg-message-passing:
   requirements_file: requirements.txt  
 
 pyg-schnet:
-  location: ../molecular-property-prediction/schnet
+  location: ../graph-prediction/schnet-molecular-prediction
   generated: true
   notebook:
     file: schnet_training.ipynb
@@ -38,7 +38,7 @@ pyg-schnet:
   requirements_file: requirements.txt  
 
 pyg-tgn:
-  location: ../temporal-graph-networks
+  location: ../link-prediction/temporal-graph-networks
   generated: true
   notebook:
     file: Train_TGN.ipynb
@@ -46,7 +46,7 @@ pyg-tgn:
   requirements_file: requirements.txt  
 
 pyg-nbfnet:
-  location: ../link-prediction-in-knowledge-graphs
+  location: ../link-prediction/NBFNet-in-knowledge-graphs
   generated: true
   notebook:
     file: NBFNet_training.ipynb
