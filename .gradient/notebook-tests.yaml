@@ -45,6 +45,13 @@ pyg-tgn:
     timeout: 1200
   requirements_file: requirements.txt  
 
+pyg-nbfnet:
+  location: ../link-prediction-in-knowledge-graphs
+  generated: true
+  notebook:
+    file: NBFNet_training.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
 # tutorials
 
 pyg-tut1:
