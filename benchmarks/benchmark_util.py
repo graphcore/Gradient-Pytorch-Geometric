@@ -4,6 +4,9 @@ from typing import Callable
 from functools import partial
 
 import matplotlib.pyplot as plt
+import matplotlib.colors as cplt
+from matplotlib.ticker import FormatStrFormatter
+import numpy as np
 import pandas as pd
 import poptorch
 import seaborn as sns
@@ -108,44 +111,55 @@ def read_precomputed_benchmarks(operation):
     a_time = a['time'].rename('A100 GPU time (μs)')
 
     speedup = a_time / b_time
+    speedup = speedup.rename('speedup')
 
     return pd.concat([a[['num_inputs', 'num_features', 'num_outputs']], a_time, b_time, speedup], axis=1)
 
+def quick_benchmarks_3d(operation, yaw=120):
+    def draw_plot(df, axes, plot_type, operation, yaw):
+        cvals  = [2**i for i in range(5)]
+        colors = ["#0068AA","#B5E4EB", "#FBE8AA", "#FBC3AA", "#FF6F79"]
+        gc_norm=plt.Normalize(min(cvals),max(cvals))
+        tuples = list(zip(map(gc_norm,cvals), colors))
+        gc_cmap = cplt.LinearSegmentedColormap.from_list("", tuples)
+        
+        z_label = ''
+        
+        if plot_type == 'trisurf':
+            # IPU
+            axes.plot_trisurf(np.log2(df['num_inputs']), np.log2(df['num_outputs']), df['speedup'], cmap=gc_cmap, norm=gc_norm)
+            # baseline
+            axes.plot_trisurf(np.log2(df['num_inputs']), np.log2(df['num_outputs']), np.ones_like(df['speedup']), cmap=gc_cmap, norm=gc_norm)
+            z_label = 'Avg Speedup vs A100 ---->'
+        elif plot_type == 'scatter3D':
+            # IPU
+            s = axes.scatter3D(np.log2(df['num_inputs']), np.log2(df['num_outputs']), df['speedup'], c=df['speedup'], cmap=gc_cmap, norm=gc_norm)
+            # baseline
+            axes.plot_trisurf(np.log2(df['num_inputs']), np.log2(df['num_outputs']), np.ones_like(df['speedup']), cmap=gc_cmap, norm=gc_norm)
+            z_label = 'Speedup vs A100 ---->'
+        else:
+            print('Unsupported plot type.')
 
-def legend_union(axes):
-    all_handles = []
-    all_labels = []
-    for ax in axes:
-        handles, labels = ax.get_legend_handles_labels()
-        for i in range(len(labels)):
-            if labels[i] not in all_labels:
-                all_handles.append(handles[i])
-                all_labels.append(labels[i])
-    return all_handles, all_labels
+        axes.set_zorder(0)
+        axes.set_xlabel('num_inputs', fontsize=10, labelpad=0)
+        axes.xaxis.set_major_formatter(FormatStrFormatter('$2^{%d}$'))
+        axes.set_ylabel('num_outputs', fontsize=10, labelpad=0)
+        axes.yaxis.set_major_formatter(FormatStrFormatter('$2^{%d}$'))
+        axes.tick_params(axis='both', which='major', labelsize=7, pad=-1)
+        axes.set_zlabel(z_label, fontsize=7, labelpad=-25)
+        axes.set_zticks([2**i for i in range(5)])
+        axes.set_zticklabels([f'{2**i}x' for i in range(5)])
+        axes.set_facecolor("#FAF8F9")
+        axes.margins(0.0)
 
-def quick_benchmarks(operation):
-    palette = dict([(2**p, f'C{p}') for p in range(16)])
-    def draw_plot(hyperp, ax):
-        ax = sns.boxplot(data=df, y=df.columns[-1], x='', ax=ax, hue=hyperp, palette=palette)
-        ax.set_yticks([2**i for i in range(5)])
-        ax.set_yticklabels([f'{2**i}x' for i in range(5)])
-        ax.axhline(1.0, color='r') # draw horizontal line for no speedup against A100
-        ax.get_legend().remove()
-        ax.set_ylabel('')
-        ax.set_title(hyperp)
-        return ax
-
+        axes.view_init(10, yaw)
+        
     df = read_precomputed_benchmarks(operation)
     df.insert(0, '', '')
-
-    fig, axes = plt.subplots(1, 3, figsize=(10, 4))
-    (ax0, ax1, ax2) = axes
-    plt.tight_layout()
-
-    draw_plot('num_inputs', ax=ax0)
-    draw_plot('num_features', ax=ax1)
-    draw_plot('num_outputs', ax=ax2)
     
-    handles, labels = legend_union(axes)
-    fig.legend(handles, labels, loc='upper left', bbox_to_anchor=(1, 0.95))
-    fig.text(-0.005, 0.5, f'{operation} speedup (IPU vs A100 GPU)', ha='center', va='center', rotation='vertical')
+    fig = plt.figure(figsize=(12, 6))
+    ax = fig.add_subplot(1, 2, 1, projection='3d')
+    draw_plot(df, axes=ax, plot_type='scatter3D', operation=operation, yaw=yaw)
+    df_smooth = df.groupby(['num_inputs', 'num_outputs']).mean(numeric_only=True).reset_index() # avg feats
+    ax = fig.add_subplot(1, 2, 2, projection='3d')
+    draw_plot(df_smooth, axes=ax, plot_type='trisurf', operation=operation, yaw=yaw)
