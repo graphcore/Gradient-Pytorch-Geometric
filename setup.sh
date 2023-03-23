@@ -20,11 +20,6 @@ export CHECKPOINT_DIR="/tmp/checkpoints"
 # in the Paperspace environment this would be ="/datasets"
 export PUBLIC_DATASET_DIR="/datasets"
 
-# Fine-tuning BERT uses the HF Squad dataset
-export HUGGINGFACE_HUB_CACHE="/tmp/huggingface_caches"
-export TRANSFORMERS_CACHE="/tmp/huggingface_caches/checkpoints"
-export HF_DATASETS_CACHE="/tmp/huggingface_caches/datasets"
-
 export POPTORCH_CACHE_DIR="${POPLAR_EXECUTABLE_CACHE_DIR}"
 export POPTORCH_LOG_LEVEL=ERR
 export RDMAV_FORK_SAFE=1

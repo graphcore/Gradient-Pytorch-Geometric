@@ -1,19 +1,19 @@
 integrations:
   poplar-executables-pyg-3-2:
     type: dataset
-    ref: paperspace/dszxu7bmykjs7j0:6gd1pi5
-  Cora:
+    ref: paperspace/dspwpjouwm2zksi:z4gdua6
+  pyg-cora:
     type: dataset
-    ref: paperspace/dsw2jrzd591wjrw:t6nyw3u
-  FB15k-237:
+    ref: paperspace/dsndie6bvzw7x8n:tblwlb4
+  pyg-fb15k-237:
     type: dataset
-    ref: paperspace/dsw2jrzd591wjrw:t6nyw3u
-  qm9:
+    ref: paperspace/dssixjs0cs42sys:wnuhv9b
+  pyg-qm9:
     type: dataset
-    ref: paperspace/dsw2jrzd591wjrw:t6nyw3u
-  Reddit:
+    ref: paperspace/dsh6w00r9u9r2x2:fiu0wlw
+  pyg-reddit:
     type: dataset
-    ref: paperspace/dsw2jrzd591wjrw:t6nyw3u
-  TUDataset:
+    ref: paperspace/ds9uqlkb8d0t2zf:iwm985b
+  pyg-tudataset:
     type: dataset
-    ref: paperspace/dsw2jrzd591wjrw:t6nyw3u
+    ref: paperspace/dsdvyj7m0szchzc:pnuu29n
