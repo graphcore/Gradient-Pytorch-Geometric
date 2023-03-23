@@ -1,7 +1,7 @@
 --find-links https://data.pyg.org/whl/torch-1.13.1+cpu.html
 
 pandas==1.5.3
-matplotlib==3.6.2
+matplotlib==3.7.1
 periodictable==1.6.1
 py3Dmol==1.8.1
 seaborn==0.12.1
