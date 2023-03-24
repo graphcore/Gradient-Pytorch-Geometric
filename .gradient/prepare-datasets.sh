@@ -45,11 +45,11 @@ exe_cache_source_dir="${PUBLIC_DATASETS_DIR}/poplar-executables-pyg-3-2"
 symlink-public-resources "${exe_cache_source_dir}" $POPLAR_EXECUTABLE_CACHE_DIR
 # Symlink Datasets Cora  FB15k-237 qm9  Reddit  TUDataset
 
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-cora" "${PUBLIC_DATASETS_DIR}/Cora"
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-fb15k-237" "${PUBLIC_DATASETS_DIR}/FB15k-237"
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-qm9" "${PUBLIC_DATASETS_DIR}/qm9"
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-reddit" "${PUBLIC_DATASETS_DIR}/Reddit"
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-tudataset" "${PUBLIC_DATASETS_DIR}/TUDataset"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-cora" "${DATASETS_DIR}/Cora"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-fb15k-237" "${DATASETS_DIR}/FB15k-237"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-qm9" "${DATASETS_DIR}/qm9"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-reddit" "${DATASETS_DIR}/Reddit"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-tudataset" "${DATASETS_DIR}/TUDataset"
 
 
 echo "Finished running setup.sh."
