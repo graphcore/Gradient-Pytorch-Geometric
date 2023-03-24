@@ -13,6 +13,9 @@
 # 6: Examples utils spec file to process and benchmark 
 # 7: Huggingface token
 # @:8 other arguments are passed to the `examples_utils platform_assesment` command
+# @:9 other arguments are passed to the `examples_utils platform_assesment` command
+
+set -x
 
 upload_report() {
     # Uploads files to a gradient dataset
@@ -41,8 +44,7 @@ run_tests(){
     TEST_CONFIG_FILE="${6}"
     mkdir -p ${LOG_FOLDER}
     cd /notebooks/
-    python -m examples_utils platform_assessment --spec ${TEST_CONFIG_FILE} "${@:8}" \
-        --ignore-errors \
+    python -m examples_utils platform_assessment --spec ${TEST_CONFIG_FILE} "${@:9}" \
         --log-dir $LOG_FOLDER \
         --gc-monitor \
         --cloning-directory /tmp/clones \
@@ -52,9 +54,15 @@ run_tests(){
     echo "PAPERSPACE-AUTOMATED-TESTING: Testing complete"
 }
 # Prep the huggingface token
-export HUGGING_FACE_HUB_TOKEN=${6}
+export HUGGING_FACE_HUB_TOKEN=${7}
+echo "Examples utils rev ${8}"
+if [ "${8}" == "unset" ]; then
+    EXAMPLES_UTILS_REV="latest_stable"
+else
+    EXAMPLES_UTILS_REV=${8}
+fi
 
-python -m pip install "examples-utils[jupyter] @ git+https://github.com/graphcore/examples-utils@a9ffaafab9b77fc9ba41489e3259e251799e0438"
+python -m pip install "examples-utils[jupyter] @ git+https://github.com/graphcore/examples-utils@${EXAMPLES_UTILS_REV}"
 python -m pip install gradient
 # In sh single equal is needed for string compare.
 if [ "${4}" = "upload-reports" ]

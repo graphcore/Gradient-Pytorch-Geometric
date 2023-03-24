@@ -1,16 +1,24 @@
 #!/bin/bash
 
+set -x
+
 symlink-public-resources() {
     public_source_dir=${1}
     target_dir=${2}
 
+    local -i COUNTER=0
     # need to wait until the dataset has been mounted (async on Paperspace's end)
-    #while [ ! -d "${PUBLIC_DATASET_DIR}/exe_cache" ]
-    while [ ! -d ${public_source_dir} ]
+    while [ $COUNTER -lt 300 ] && ( [ ! -d ${public_source_dir} ] || [ -z "$(ls -A ${public_source_dir})" ] )
     do
         echo "Waiting for dataset "${public_source_dir}" to be mounted..."
         sleep 1
+        ((COUNTER++))
     done
+
+    if [ $COUNTER -eq 300 ]; then
+        echo "Warning! Abandoning symlink - source Dataset ${public_source_dir} has not been mounted & populated after 5m."
+        return
+    fi
 
     echo "Symlinking - ${public_source_dir} to ${target_dir}"
 
@@ -23,20 +31,25 @@ symlink-public-resources() {
     fuse-overlayfs -o lowerdir=${public_source_dir},upperdir=${upperdir},workdir=${workdir} ${target_dir}
 
 }
-apt update -y
-apt install -y libfuse3-dev fuse-overlayfs
+
+if [ ! "$(command -v fuse-overlayfs)" ]
+then
+    echo "fuse-overlayfs not found installing - please update to our latest image"
+    apt update -y
+    apt install -o DPkg::Lock::Timeout=120 -y psmisc libfuse3-dev fuse-overlayfs
+fi
 
 echo "Starting preparation of datasets"
 # symlink exe_cache files
-exe_cache_source_dir="${PUBLIC_DATASET_DIR}/poplar-executables-pyg-3-2"
+exe_cache_source_dir="${PUBLIC_DATASETS_DIR}/poplar-executables-pyg-3-2"
 symlink-public-resources "${exe_cache_source_dir}" $POPLAR_EXECUTABLE_CACHE_DIR
 # Symlink Datasets Cora  FB15k-237 qm9  Reddit  TUDataset
 
-symlink-public-resources "${PUBLIC_DATASET_DIR}/pyg-cora" "${PUBLIC_DATASET_DIR}/Cora"
-symlink-public-resources "${PUBLIC_DATASET_DIR}/pyg-fb15k-237" "${PUBLIC_DATASET_DIR}/FB15k-237"
-symlink-public-resources "${PUBLIC_DATASET_DIR}/pyg-qm9" "${PUBLIC_DATASET_DIR}/qm9"
-symlink-public-resources "${PUBLIC_DATASET_DIR}/pyg-reddit" "${PUBLIC_DATASET_DIR}/Reddit"
-symlink-public-resources "${PUBLIC_DATASET_DIR}/pyg-tudataset" "${PUBLIC_DATASET_DIR}/TUDataset"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-cora" "${PUBLIC_DATASET_DIR}/Cora"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-fb15k-237" "${PUBLIC_DATASET_DIR}/FB15k-237"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-qm9" "${PUBLIC_DATASET_DIR}/qm9"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-reddit" "${PUBLIC_DATASET_DIR}/Reddit"
+symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-tudataset" "${PUBLIC_DATASET_DIR}/TUDataset"
 
 
 echo "Finished running setup.sh."
