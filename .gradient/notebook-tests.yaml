@@ -45,8 +45,8 @@ pyg-nbfnet:
     timeout: 1200
   requirements_file: requirements.txt  
 
-pyg-benchmarks:
-  location: ../benchmarks
+pyg-ipu-speed-advantage:
+  location: ../ipu-speed-advantage
   generated: true
   notebook:
     file: benchmarking_gnn_on_ipus.ipynb
