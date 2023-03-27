@@ -1,0 +1,19 @@
+integrations:
+  poplar-executables-pyg-3-2:
+    type: dataset
+    ref: paperspace/dspwpjouwm2zksi:z4gdua6
+  pyg-cora:
+    type: dataset
+    ref: paperspace/dsndie6bvzw7x8n:tblwlb4
+  pyg-fb15k-237:
+    type: dataset
+    ref: paperspace/dssixjs0cs42sys:wnuhv9b
+  pyg-qm9:
+    type: dataset
+    ref: paperspace/dsh6w00r9u9r2x2:fiu0wlw
+  pyg-reddit:
+    type: dataset
+    ref: paperspace/ds9uqlkb8d0t2zf:iwm985b
+  pyg-tudataset:
+    type: dataset
+    ref: paperspace/dsdvyj7m0szchzc:pnuu29n

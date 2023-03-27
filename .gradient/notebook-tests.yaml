@@ -1,0 +1,88 @@
+Graphcore-Pytorch-Geometric-README_first:
+  location: ../
+  generated: true
+  notebook:
+    file: README_first.ipynb
+
+
+pyg-cluster-GCN:
+  location: ../node-prediction
+  generated: true
+  notebook:
+    file: cluster_gcn_training.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt
+
+pyg-message-passing:
+  location: ../graph-prediction/gin-molecular-prediction
+  generated: true
+  notebook:
+    file: gin_training.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
+pyg-schnet:
+  location: ../graph-prediction/schnet-molecular-prediction
+  generated: true
+  notebook:
+    file: schnet_training.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
+pyg-tgn:
+  location: ../link-prediction/temporal-graph-networks
+  generated: true
+  notebook:
+    file: Train_TGN.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
+pyg-nbfnet:
+  location: ../link-prediction/NBFNet-for-knowledge-graphs
+  generated: true
+  notebook:
+    file: NBFNet_training.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
+pyg-ipu-speed-advantage:
+  location: ../ipu-speed-advantage
+  generated: true
+  notebook:
+    file: benchmarking_gnn_on_ipus.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
+# tutorials
+
+pyg-tut1:
+  location: ../learning-pytorch-geometric-on-ipus
+  generated: true
+  notebook:
+    file: 1_at_a_glance.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
+pyg-tut2:
+  location: ../learning-pytorch-geometric-on-ipus
+  generated: true
+  notebook:
+    file: 2_a_worked_example.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
+pyg-tut3:
+  location: ../learning-pytorch-geometric-on-ipus
+  generated: true
+  notebook:
+    file: 3_small_graph_batching_with_padding.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
+
+pyg-tut4:
+  location: ../learning-pytorch-geometric-on-ipus
+  generated: true
+  notebook:
+    file: 4_small_graph_batching_with_packing.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt  
