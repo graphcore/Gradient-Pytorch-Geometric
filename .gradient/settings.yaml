@@ -1,4 +1,7 @@
 integrations:
+  gcl:
+    type: dataset
+    ref: paperspace/ds7me5hgjbfht6q:zcv65hy
   poplar-executables-pyg-3-2:
     type: dataset
     ref: paperspace/dspwpjouwm2zksi:z4gdua6
@@ -17,6 +20,3 @@ integrations:
   pyg-tudataset:
     type: dataset
     ref: paperspace/dsdvyj7m0szchzc:pnuu29n
-  gcl:
-    type: dataset
-    ref: paperspace/ds7me5hgjbfht6q:zcv65hy
