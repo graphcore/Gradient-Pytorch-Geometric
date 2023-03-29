@@ -32,6 +32,9 @@ export CHECKPOINT_DIR="/tmp/checkpoints"
 
 # mounted public dataset directory (path in the container)
 # in the Paperspace environment this would be ="/datasets"
+export POPTORCH_CACHE_DIR="${POPLAR_EXECUTABLE_CACHE_DIR}"
+export POPART_CACHE_DIR="${POPLAR_EXECUTABLE_CACHE_DIR}"
+
 export PUBLIC_DATASETS_DIR="/datasets"
 export POPTORCH_LOG_LEVEL=ERR
 export RDMAV_FORK_SAFE=1
