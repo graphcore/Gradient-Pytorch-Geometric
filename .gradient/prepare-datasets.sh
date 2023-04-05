@@ -1,36 +1,6 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
-set -x
-
-symlink-public-resources() {
-    public_source_dir=${1}
-    target_dir=${2}
-
-    local -i COUNTER=0
-    # need to wait until the dataset has been mounted (async on Paperspace's end)
-    while [ $COUNTER -lt 300 ] && ( [ ! -d ${public_source_dir} ] || [ -z "$(ls -A ${public_source_dir})" ] )
-    do
-        echo "Waiting for dataset "${public_source_dir}" to be mounted..."
-        sleep 1
-        ((COUNTER++))
-    done
-
-    if [ $COUNTER -eq 300 ]; then
-        echo "Warning! Abandoning symlink - source Dataset ${public_source_dir} has not been mounted & populated after 5m."
-        return
-    fi
-
-    echo "Symlinking - ${public_source_dir} to ${target_dir}"
-
-    # Make sure it exists otherwise you'll copy your current dir
-    mkdir -p ${target_dir}
-    workdir="/fusedoverlay/workdirs/${public_source_dir}"
-    upperdir="/fusedoverlay/upperdir/${public_source_dir}"
-    mkdir -p ${workdir}
-    mkdir -p ${upperdir}
-    fuse-overlayfs -o lowerdir=${public_source_dir},upperdir=${upperdir},workdir=${workdir} ${target_dir}
-
-}
+set -uxo pipefail
 
 if [ ! "$(command -v fuse-overlayfs)" ]
 then
@@ -40,24 +10,15 @@ then
 fi
 
 echo "Starting preparation of datasets"
-# symlink exe_cache files
-exe_cache_source_dir="${PUBLIC_DATASETS_DIR}/poplar-executables-pyg-3-2"
-symlink-public-resources "${exe_cache_source_dir}" $POPLAR_EXECUTABLE_CACHE_DIR
-# Symlink Datasets Cora  FB15k-237 qm9  Reddit  TUDataset
-
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-cora" "${DATASETS_DIR}/Cora"
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-fb15k-237" "${DATASETS_DIR}/FB15k-237"
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-qm9" "${DATASETS_DIR}/qm9"
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-reddit" "${DATASETS_DIR}/Reddit"
-symlink-public-resources "${PUBLIC_DATASETS_DIR}/pyg-tudataset" "${DATASETS_DIR}/TUDataset"
+/notebooks/.gradient/symlink_datasets_and_caches.py
 
 
 echo "Finished running setup.sh."
 # Run automated test if specified
-if [[ "$1" == "test" ]]; then
+if [[ "${1:-}" == 'test' ]]; then
     #source .gradient/automated-test.sh "${@:2}"
-    bash /notebooks/.gradient/automated-test.sh $2 $3 $4 $5 $6 $7 "${@:8}"
-elif [[ "$2" == "test" ]]; then
+    /notebooks/.gradient/automated-test.sh $2 $3 $4 $5 $6 $7 "${@:8}"
+elif [[ "${2:-}" == 'test' ]]; then
     #source .gradient/automated-test.sh "${@:2}"
-    bash /notebooks/.gradient/automated-test.sh $3 $4 $5 $6 $7 $8 "${@:9}"
+    /notebooks/.gradient/automated-test.sh $3 $4 $5 $6 $7 $8 "${@:9}"
 fi
