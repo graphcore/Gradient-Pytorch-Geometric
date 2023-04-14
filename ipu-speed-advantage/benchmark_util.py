@@ -125,17 +125,21 @@ def quick_benchmarks_3d(operation, yaw=120):
         
         z_label = ''
         
+        x = np.log2(df['num_inputs'])
+        y = np.log2(df['num_outputs'])
+        speedup = df['speedup']
+        kw = {'cmap':gc_cmap, 'norm':gc_norm, 'edgecolors': 'k', 'linewidth': .2, 'aa': 4} 
         if plot_type == 'trisurf':
             # IPU
-            axes.plot_trisurf(np.log2(df['num_inputs']), np.log2(df['num_outputs']), df['speedup'], cmap=gc_cmap, norm=gc_norm)
+            axes.plot_trisurf(x, y, speedup, **kw)
             # baseline
-            axes.plot_trisurf(np.log2(df['num_inputs']), np.log2(df['num_outputs']), np.ones_like(df['speedup']), cmap=gc_cmap, norm=gc_norm)
+            axes.plot_trisurf(x, y, np.ones_like(speedup), **kw)
             z_label = 'Avg Speedup vs A100 ---->'
         elif plot_type == 'scatter3D':
             # IPU
-            s = axes.scatter3D(np.log2(df['num_inputs']), np.log2(df['num_outputs']), df['speedup'], c=df['speedup'], cmap=gc_cmap, norm=gc_norm)
+            s = axes.scatter3D(x, y, speedup, c=speedup, **kw)
             # baseline
-            axes.plot_trisurf(np.log2(df['num_inputs']), np.log2(df['num_outputs']), np.ones_like(df['speedup']), cmap=gc_cmap, norm=gc_norm)
+            axes.plot_trisurf(x, y, np.ones_like(speedup), **kw)
             z_label = 'Speedup vs A100 ---->'
         else:
             print('Unsupported plot type.')
@@ -149,7 +153,7 @@ def quick_benchmarks_3d(operation, yaw=120):
         axes.set_zlabel(z_label, fontsize=7, labelpad=-25)
         axes.set_zticks([2**i for i in range(5)])
         axes.set_zticklabels([f'{2**i}x' for i in range(5)])
-        axes.set_facecolor("#FAF8F9")
+        axes.set_facecolor("#FFF")
         axes.margins(0.0)
 
         axes.view_init(10, yaw)
@@ -157,9 +161,10 @@ def quick_benchmarks_3d(operation, yaw=120):
     df = read_precomputed_benchmarks(operation)
     df.insert(0, '', '')
     
-    fig = plt.figure(figsize=(12, 6))
+    fig = plt.figure(figsize=(9,4),dpi=300)
     ax = fig.add_subplot(1, 2, 1, projection='3d')
     draw_plot(df, axes=ax, plot_type='scatter3D', operation=operation, yaw=yaw)
     df_smooth = df.groupby(['num_inputs', 'num_outputs']).mean(numeric_only=True).reset_index() # avg feats
     ax = fig.add_subplot(1, 2, 2, projection='3d')
     draw_plot(df_smooth, axes=ax, plot_type='trisurf', operation=operation, yaw=yaw)
+    
