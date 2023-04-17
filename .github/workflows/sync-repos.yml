@@ -13,6 +13,8 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GH_TOKEN_SYNC_REPOS }}
     - name: Sync repos
       env:
         DEST_REPO_URL: https://michaln-gc:${{ secrets.GH_TOKEN_SYNC_REPOS }}@github.com/graphcore/Gradient-Pytorch-Geometric
