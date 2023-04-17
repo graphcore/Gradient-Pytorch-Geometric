@@ -1,0 +1,92 @@
+name: 2. Tests on Local vPOD
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_env:
+        type: string
+        description: "Testing environment, Local or Paperspace"
+        required: false
+        default: "Local"
+      scope:
+        type: choice
+        description: "Scope of notebooks"
+        required: false
+        default: "short"
+        options:
+        - short
+        - full
+      docker_image:
+        type: string
+        description: "Docker image used in notebook testing"
+        required: false
+        default: "graphcore/pytorch-geometric-jupyter:3.2.0-ubuntu-20.04-20230314"
+  push:
+    branches:
+      - ci-*
+  schedule:
+    # run at 11:00 PM GMT every night
+    - cron:  '0 23 * * *'
+
+
+
+jobs:
+
+  tests:
+    runs-on:  'M2000'
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ inputs.test_env == 'Paperspace' && 1 || 5 }}  # in paperspace: 1, in Local GC env: 5
+      matrix:
+        notebook: ["Graphcore-Pytorch-Geometric-README_first", "pyg-cluster-GCN", "pyg-message-passing", "pyg-schnet", "pyg-tgn", "pyg-nbfnet", "pyg-ipu-speed-advantage", "pyg-tut1", "pyg-tut2", "pyg-tut3", "pyg-tut4"]
+        machine_type: ["IPU-POD4"]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        path: notebooks
+    - uses: actions/checkout@v3
+      with:
+        repository: graphcore/paperspace-automation
+        ref: main
+        token: ${{ secrets.GH_TOKEN_SYNC_REPOS }}
+        path: paperspace-automation
+    - name: Install dependencies
+      working-directory: paperspace-automation
+      run: |
+        set -x
+
+        sudo sh -c "curl https://raw.githubusercontent.com/kadwanev/retry/0b65e6b7f54ed36b492910470157e180bbcc3c84/retry -o /usr/local/bin/retry && chmod +x /usr/local/bin/retry"
+
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+        pip install -U pip
+        pip install -r testing/requirements-launch.txt
+        pip install 'huggingface_hub[cli]==0.13.3'
+    - name: Run tests
+      env:
+        TEST_DOCKER_IMAGE: ${{ inputs.docker_image || 'graphcore/pytorch-geometric-jupyter:3.2.0-ubuntu-20.04-20230314' }}
+        TEST_NAME_PREFIX: gha-${{ github.run_number }}-
+        TEST_MACHINE_TYPE: ${{ matrix.machine_type }}
+        TEST_NOTEBOOK: ${{ matrix.notebook }}
+        EXAMPLES_UTILS_REV: 3c3f3163bd5278c5a044c236931d66c33ba0d4c3
+      working-directory: paperspace-automation
+      run: |
+        set -x
+        export TEST_NOTEBOOK_REPO=`realpath ../notebooks/`
+        cd testing
+        TEST_ENV_ARG=
+        if [ "${{ inputs.test_env || 'Local' }}" = "Local" ]; then
+            TEST_ENV_ARG='--local'
+        else
+            gradient apiKey ${{ secrets.paperspace_api_key }}
+        fi
+        # huggingface-cli login --token ${{ secrets.hugging_face_hub_token }}
+        retry -t 3 -s 120 -- python3 test_single_notebook.py $TEST_ENV_ARG --run-id ${{ github.run_number }}
+        rm -f ~/.paperspace/config.json
+        rm -f ~/.cache/huggingface/token
+    - name: Upload Report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-reports-${{ github.run_number }}-${{ matrix.notebook }}-${{ matrix.machine_type }}
+        path: paperspace-automation/storage/test-reports-${{ github.run_number }}/*.tar.gz
