@@ -22,4 +22,4 @@ jobs:
         # remove pull refs that are for Pull Requests, GitHub does not accept them
         git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
 
-        git push --mirror target main
+        git push --mirror target
