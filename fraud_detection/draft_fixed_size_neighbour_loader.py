@@ -32,6 +32,21 @@ Known issues:
  - Trimming needs to be input_id aware - shouldn't prune the batch ids
  - Input ids, get doubled when the call to the default collater happens, caused by: https://github.com/pyg-team/pytorch_geometric/blob/master/torch_geometric/loader/dataloader.py#L12
     `batch = super().__call__(data_list)`
+ - Edge indices are converted to floats? - this needs to return the correct types
+    @_create_structure_dict.register(HeteroData)
+    def _(self, data: HeteroData) -> Dict[Union[NodeType, EdgeType], Any]:
+        out = dict()
+        for key, attr in data._global_store.to_dict().items():  # pylint: disable=protected-access
+            out[key] = _reset_attr(attr)
+        for key, attr in chain(data.node_items(), data.edge_items()):
+            out[key] = {
+                k: torch.zeros(_reset_dim(v.shape, k))
+                for k, v in attr.to_dict().items()
+                if isinstance(v, torch.Tensor)
+            }
+        return out
+
+        , dtype=data[key][k].dtype)
 """
 
 
