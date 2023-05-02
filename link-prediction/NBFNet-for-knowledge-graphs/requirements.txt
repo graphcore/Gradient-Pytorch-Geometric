@@ -1,2 +1,3 @@
 networkx==3.0
 matplotlib==3.7.1
+examples-utils[common] @ git+https://github.com/graphcore/examples-utils@latest_stable
