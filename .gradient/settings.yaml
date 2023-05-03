@@ -20,3 +20,6 @@ integrations:
   pyg-tudataset:
     type: dataset
     ref: paperspace/dsdvyj7m0szchzc:pnuu29n
+  gcl:
+    type: dataset
+    ref: paperspace/ds7me5hgjbfht6q:8ngwr2a
