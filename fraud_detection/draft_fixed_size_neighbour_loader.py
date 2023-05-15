@@ -47,6 +47,7 @@ Known issues:
         return out
 
         , dtype=data[key][k].dtype)
+ - Should e_id or n_id be something in particular?
 """
 
 
