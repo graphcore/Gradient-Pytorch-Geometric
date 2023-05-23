@@ -4,11 +4,14 @@ import poptorch
 import torch
 from poptorch_geometric.collate import FixedSizeCollater
 from poptorch_geometric.collate import CombinedBatchingCollater
+from poptorch_geometric.fixed_size_options import FixedSizeOptions
+from poptorch_geometric.pyg_dataloader import OverSizeStrategy
 from torch_geometric.data import Data, FeatureStore, GraphStore, HeteroData
 from torch_geometric.loader import NeighborLoader
 from torch_geometric.loader.utils import get_input_nodes
 from torch_geometric.sampler import NeighborSampler
 from torch_geometric.typing import EdgeType, InputNodes, OptTensor
+
 
 
 # TODO: Tidy
@@ -57,6 +60,7 @@ class PyGFixedSizeNeighborLoader(torch.utils.data.DataLoader):
         self,
         data: Union[Data, HeteroData, Tuple[FeatureStore, GraphStore]],
         num_neighbors: Union[List[int], Dict[EdgeType, List[int]]],
+        fixed_size_options: FixedSizeOptions,
         input_nodes: InputNodes = None,
         input_time: OptTensor = None,
         replace: bool = False,
@@ -70,7 +74,10 @@ class PyGFixedSizeNeighborLoader(torch.utils.data.DataLoader):
         filter_per_worker: bool = False,
         batch_size: int = 1,
         neighbor_sampler: Optional[NeighborSampler] = None,
-        collater_args: Optional[Dict[str, Union[int, float]]] = None,
+        over_size_strategy: OverSizeStrategy = OverSizeStrategy.TrimNodesAndEdges,
+        add_pad_masks: Optional[bool] = True,
+        follow_batch: Optional[Union[List[str], Tuple[str, ...]]] = None,
+        exclude_keys: Optional[Union[List[str], Tuple[str, ...]]] = None,
         **kwargs,
     ):
         self.batch_size = batch_size
@@ -92,8 +99,18 @@ class PyGFixedSizeNeighborLoader(torch.utils.data.DataLoader):
         )
         _, input_nodes = get_input_nodes(data, input_nodes)
 
-        collater_args = collater_args if collater_args else {}
-        collater = self._create_collater(**collater_args)
+        collater = self._create_collater(
+            fixed_size_options=fixed_size_options,
+            add_masks_to_batch=add_pad_masks,
+            trim_nodes=(
+                over_size_strategy in (OverSizeStrategy.TrimNodes,
+                                       OverSizeStrategy.TrimNodesAndEdges)),
+            trim_edges=(
+                over_size_strategy in (OverSizeStrategy.TrimEdges,
+                                       OverSizeStrategy.TrimNodesAndEdges)),
+            follow_batch=follow_batch,
+            exclude_keys=exclude_keys)
+
         super().__init__(dataset=range(input_nodes.size(0)),
                          batch_size=self.batch_size,
                          collate_fn=collater,
@@ -115,6 +132,7 @@ class FixedSizeNeighborLoader(PyGFixedSizeNeighborLoader, poptorch.DataLoader):
         self,
         data: Union[Data, HeteroData, Tuple[FeatureStore, GraphStore]],
         num_neighbors: Union[List[int], Dict[EdgeType, List[int]]],
+        fixed_size_options: FixedSizeOptions,
         input_nodes: InputNodes = None,
         input_time: OptTensor = None,
         replace: bool = False,
@@ -128,7 +146,10 @@ class FixedSizeNeighborLoader(PyGFixedSizeNeighborLoader, poptorch.DataLoader):
         filter_per_worker: bool = False,
         batch_size: int = 1,
         neighbor_sampler: Optional[NeighborSampler] = None,
-        collater_args: Optional[Dict[str, Union[int, float]]] = None,
+        over_size_strategy: OverSizeStrategy = OverSizeStrategy.TrimNodesAndEdges,
+        add_pad_masks: Optional[bool] = True,
+        follow_batch: Optional[Union[List[str], Tuple[str, ...]]] = None,
+        exclude_keys: Optional[Union[List[str], Tuple[str, ...]]] = None,
         options: Optional[poptorch.Options] = None,
         **kwargs,
     ):
@@ -141,6 +162,7 @@ class FixedSizeNeighborLoader(PyGFixedSizeNeighborLoader, poptorch.DataLoader):
         super().__init__(
             data,
             num_neighbors,
+            fixed_size_options,
             input_nodes=input_nodes,
             input_time=input_time,
             replace=replace,
@@ -154,7 +176,10 @@ class FixedSizeNeighborLoader(PyGFixedSizeNeighborLoader, poptorch.DataLoader):
             filter_per_worker=True,
             batch_size=batch_size,
             neighbor_sampler=neighbor_sampler,
-            collater_args=collater_args,
+            over_size_strategy=over_size_strategy,
+            add_pad_masks=add_pad_masks,
+            follow_batch=follow_batch,
+            exclude_keys=exclude_keys,
             options=options,
             **kwargs,
         )
