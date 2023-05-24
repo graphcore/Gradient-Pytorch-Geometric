@@ -19,7 +19,7 @@ pyg-message-passing:
   notebook:
     file: gin_training.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
 
 pyg-schnet:
   location: ../graph-prediction/schnet-molecular-prediction
@@ -27,7 +27,7 @@ pyg-schnet:
   notebook:
     file: schnet_training.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
 
 pyg-tgn:
   location: ../link-prediction/temporal-graph-networks
@@ -35,7 +35,7 @@ pyg-tgn:
   notebook:
     file: Train_TGN.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
 
 pyg-nbfnet:
   location: ../link-prediction/NBFNet-for-knowledge-graphs
@@ -43,7 +43,7 @@ pyg-nbfnet:
   notebook:
     file: NBFNet_training.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
 
 pyg-ipu-speed-advantage:
   location: ../ipu-speed-advantage
@@ -51,7 +51,7 @@ pyg-ipu-speed-advantage:
   notebook:
     file: benchmarking_gnn_on_ipus.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
 
 # tutorials
 
@@ -61,7 +61,7 @@ pyg-tut1:
   notebook:
     file: 1_at_a_glance.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
 
 pyg-tut2:
   location: ../learning-pytorch-geometric-on-ipus
@@ -69,7 +69,7 @@ pyg-tut2:
   notebook:
     file: 2_a_worked_example.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
 
 pyg-tut3:
   location: ../learning-pytorch-geometric-on-ipus
@@ -77,7 +77,7 @@ pyg-tut3:
   notebook:
     file: 3_small_graph_batching_with_padding.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
 
 pyg-tut4:
   location: ../learning-pytorch-geometric-on-ipus
@@ -85,4 +85,13 @@ pyg-tut4:
   notebook:
     file: 4_small_graph_batching_with_packing.ipynb
     timeout: 1200
-  requirements_file: requirements.txt  
+  requirements_file: requirements.txt
+
+# MolFeat
+molfeat:
+  location: ../molfeat
+  generated: true
+  notebook:
+    file: pytorch_geometric_molfeat.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt

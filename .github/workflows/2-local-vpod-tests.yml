@@ -21,10 +21,15 @@ on:
         description: "List of notebooks to test in JSON format"
         required: false
         default: '["Graphcore-Pytorch-Geometric-README_first"]'
-  push:
+      machine_types:
+        type: string
+        description: "List of machines types"
+        required: false
+        default: '["IPU-POD4"]'
+  pull_request:
   schedule:
-    # run at 11:00 PM GMT every night
-    - cron:  '0 23 * * *'
+    # run at 7:00 PM GMT every night
+    - cron:  '0 19 * * *'
 
 
 jobs:
@@ -33,11 +38,13 @@ jobs:
     with:
       docker_image: ${{ inputs.docker_image || 'graphcore/pytorch-geometric-jupyter:3.2.0-ubuntu-20.04-20230314' }}
       notebooks: ${{ inputs.notebooks }}
-      machine_types: '["IPU-POD4"]'
+      machine_types: ${{ inputs.machine_types }}
       test_env: ${{ inputs.test_env || 'Local' }}
     secrets:
       gh_token:  ${{ secrets.GH_TOKEN_SYNC_REPOS }}
 #      paperspace_api_key: ${{ secrets.paperspace_api_key }}
-#      hugging_face_hub_token: ${{ secrets.hugging_face_hub_token }}
+      hugging_face_hub_token: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
       ci_slack_channel_id: ${{ secrets.CI_SLACK_CHANNEL_ID }}
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
