@@ -94,4 +94,3 @@ molfeat:
   notebook:
     file: pytorch_geometric_molfeat.ipynb
     timeout: 1200
-  requirements_file: requirements.txt
