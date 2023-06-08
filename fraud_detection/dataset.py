@@ -6,24 +6,31 @@ from tqdm import tqdm
 
 # TODO: Tidy this
 
+DEFAULT_NON_TARGET_NODE_TYPES = [
+    "card1", "card2", "card3", "card4", "card5", "card6",
+    "ProductCD", "addr1", "addr2", "P_emaildomain", "R_emaildomain"]
+DEFAULT_TARGET_CAT_FEAT_COLS = [
+    "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9",
+    "DeviceType", "DeviceInfo", "id_12", "id_13", "id_14",
+    "id_15", "id_16", "id_17", "id_18", "id_19", "id_20",
+    "id_21", "id_22", "id_23", "id_24", "id_25", "id_26",
+    "id_27", "id_28", "id_29", "id_30", "id_31", "id_32",
+    "id_33", "id_34", "id_35", "id_36", "id_37", "id_38"]
+
+
 def get_categorical_features(feat_df, cat_cols):
-    class CategoricalEncoder:
 
-        def __init__(self, key):
-            self.key = key
+    def get_cat_feat(df, key):
+        categories = set(
+            row[key] for _, row in df.iterrows())
+        mapping = {cat: i for i, cat in enumerate(categories)}
 
-        def __call__(self, df):
-            categories = set(
-                row[self.key] for _, row in df.iterrows())
-            mapping = {cat: i for i, cat in enumerate(categories)}
+        x = torch.zeros(len(df), len(mapping))
+        for i, row in df.iterrows():
+            x[i, mapping[row[key]]] = 1
+        return x
 
-            x = torch.zeros(len(df), len(mapping))
-            for i, row in df.iterrows():
-                x[i, mapping[row[self.key]]] = 1
-            return x
-
-    cat_encoders = [CategoricalEncoder(key) for key in cat_cols]
-    cat_features = [cat_enc(feat_df) for cat_enc in tqdm(cat_encoders)]
+    cat_features = [get_cat_feat(feat_df, key) for key in tqdm(cat_cols)]
     return torch.cat(cat_features, dim=-1)
 
 
@@ -59,25 +66,31 @@ def get_edge_list(df, node_type_cols):
 class IeeeFraudDetectionDataset(InMemoryDataset):
 
     url = 'https://www.kaggle.com/c/ieee-fraud-detection/data'
+    exclude_cols = ["TransactionID", "isFraud", "TransactionDT"]
 
-    non_target_node_types = [
-        "card1", "card2", "card3", "card4", "card5", "card6",
-        "ProductCD", "addr1", "addr2", "P_emaildomain", "R_emaildomain"]
-    excl_cols = ["TransactionID", "isFraud", "TransactionDT"]
-    transaction_cat_features = [
-        "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9",
-        "DeviceType", "DeviceInfo", "id_12", "id_13", "id_14",
-        "id_15", "id_16", "id_17", "id_18", "id_19", "id_20",
-        "id_21", "id_22", "id_23", "id_24", "id_25", "id_26",
-        "id_27", "id_28", "id_29", "id_30", "id_31", "id_32",
-        "id_33", "id_34", "id_35", "id_36", "id_37", "id_38"]
-
-    def __init__(self, root, transform=None, pre_transform=None, pre_filter=None):
+    def __init__(self,
+                 root,
+                 non_target_node_types=None,
+                 target_cat_feat_cols=None,
+                 transform=None,
+                 pre_transform=None,
+                 pre_filter=None):
         super().__init__(root, transform, pre_transform, pre_filter)
         self.data = torch.load(self.processed_paths[0])
+
+        if non_target_node_types is None:
+            self.non_target_node_types = DEFAULT_NON_TARGET_NODE_TYPES
+        else:
+            self.non_target_node_types = non_target_node_types
+
+        if target_cat_feat_cols is None:
+            self.target_cat_feat_cols = DEFAULT_TARGET_CAT_FEAT_COLS
+        else:
+            self.target_cat_feat_cols = target_cat_feat_cols
+
         assert not set(self.non_target_node_types).intersection(
-            set(self.excl_cols),
-            set(self.transaction_cat_features)
+            set(self.exclude_cols),
+            set(self.target_cat_feat_cols)
         )
 
     @property
@@ -112,9 +125,9 @@ class IeeeFraudDetectionDataset(InMemoryDataset):
 
         transaction_numeric_features = [
             column for column in transaction_df.columns
-            if column not in self.non_target_node_types + self.excl_cols + self.transaction_cat_features]
+            if column not in self.non_target_node_types + self.exclude_cols + self.target_cat_feat_cols]
 
-        transaction_feat_df = transaction_df[transaction_numeric_features + self.transaction_cat_features].copy()
+        transaction_feat_df = transaction_df[transaction_numeric_features + self.target_cat_feat_cols].copy()
         transaction_feat_df = transaction_feat_df.fillna(0)
 
         print("Getting transaction categorical features...")
@@ -147,10 +160,10 @@ class IeeeFraudDetectionDataset(InMemoryDataset):
         if self.pre_transform is not None:
             data = self.pre_transform(data)
 
-        torch.save([data], self.processed_paths[0])
+        torch.save(data, self.processed_paths[0])
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     dataset = IeeeFraudDetectionDataset(".")
     print(dataset)
     print(dataset[0])
