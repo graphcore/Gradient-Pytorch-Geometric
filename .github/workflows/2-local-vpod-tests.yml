@@ -26,6 +26,15 @@ on:
         description: "List of machines types"
         required: false
         default: '["IPU-POD4"]'
+      test_mode:
+        type: string
+        description: "The test workload that we are running, default or config set in the .github/test_configs/image-config.yaml"
+        required: false
+      test_config:
+        type: string
+        description: "Config which can be used to define special parameters such as docker image."
+        default: ".github/test_configs/image-config.yaml"
+        required: false
   pull_request:
   schedule:
     # run at 7:00 PM GMT every night
@@ -40,9 +49,10 @@ jobs:
       notebooks: ${{ inputs.notebooks }}
       machine_types: ${{ inputs.machine_types }}
       test_env: ${{ inputs.test_env || 'Local' }}
+      test_mode: "default"
+      test_config: ${{ inputs.test_config || '.github/test_configs/image-config.yaml' }}
     secrets:
       gh_token:  ${{ secrets.GH_TOKEN_SYNC_REPOS }}
-#      paperspace_api_key: ${{ secrets.paperspace_api_key }}
       hugging_face_hub_token: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
       ci_slack_channel_id: ${{ secrets.CI_SLACK_CHANNEL_ID }}
