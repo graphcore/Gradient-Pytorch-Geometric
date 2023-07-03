@@ -94,3 +94,13 @@ molfeat:
   notebook:
     file: pytorch_geometric_molfeat.ipynb
     timeout: 1200
+  requirements_file: requirements.txt
+
+# Graphium
+graphium:
+  location: ../graphium
+  generated: true
+  notebook:
+    file: running-multitask-ipu.ipynb
+    timeout: 1200
+  requirements_file: requirements.txt
