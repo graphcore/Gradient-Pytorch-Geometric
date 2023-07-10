@@ -5,4 +5,4 @@ numpy==1.24.2
 pandas
 pytest==6.2.5
 tqdm==4.60.0
-examples-utils[common] @ git+https://github.com/graphcore/examples-utils@latest_stable
+graphcore-cloud-tools[logger] @ git+https://github.com/graphcore/graphcore-cloud-tools
