@@ -10,7 +10,7 @@
 # 3: Version ID
 # 4: Either the runtime in which we are running or 'upload-reports'
 # 5: Folder in which to save/look for tar.gz report archives
-# 6: Examples utils spec file to process and benchmark 
+# 6: Examples utils spec file to process and benchmark
 # 7: Huggingface token
 # @:8 other arguments are passed to the `examples_utils platform_assesment` command
 # @:9 other arguments are passed to the `examples_utils platform_assesment` command

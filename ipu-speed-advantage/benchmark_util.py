@@ -15,18 +15,11 @@ from torch_scatter import scatter
 
 
 class ScatterOp(torch.nn.Module):
-
-    def __init__(self,
-                 num_inputs: int,
-                 num_features: int,
-                 num_outputs: int,
-                 reduce: str = 'sum') -> None:
+    def __init__(self, num_inputs: int, num_features: int, num_outputs: int, reduce: str = 'sum') -> None:
         super().__init__()
-        self.scatter = partial(scatter,
-                               dim_size=num_outputs,
-                               reduce=reduce)
+        self.scatter = partial(scatter, dim_size=num_outputs, reduce=reduce)
         input = torch.randn(num_inputs, num_features)
-        index = torch.randint(num_outputs, (num_inputs, ))
+        index = torch.randint(num_outputs, (num_inputs,))
         self.register_buffer('input', input)
         self.register_buffer('index', index)
         self.register_buffer('output', self(input, index, None)[-1])
@@ -39,14 +32,10 @@ class ScatterOp(torch.nn.Module):
 
 
 class GatherOp(torch.nn.Module):
-
-    def __init__(self,
-                 num_inputs: int,
-                 num_features: int,
-                 num_outputs: int) -> None:
+    def __init__(self, num_inputs: int, num_features: int, num_outputs: int) -> None:
         super().__init__()
         input = torch.randn(num_inputs, num_features)
-        index = torch.randint(num_inputs, (num_outputs, ))
+        index = torch.randint(num_inputs, (num_outputs,))
         self.register_buffer("input", input)
         self.register_buffer("index", index)
         self.register_buffer('output', self(input, index, None)[-1])
@@ -65,7 +54,7 @@ class PerfMetrics:
     Assumes IPU-BOWM2000 clock speed of 1850 MHz
     Defines an effective bandwidth from the size of the output result.
     """
-    bow_clock = 1850.  # MHz
+    bow_clock = 1850.0  # MHz
 
     def __init__(self, pop_model, num_repeats) -> None:
         output = pop_model.operator.output
@@ -80,23 +69,17 @@ class PerfMetrics:
         time_s = time_us * 10**-6
         effective_bandwidth = self.out_gib / time_s
 
-        return {
-            "cycles": avg_cycles,
-            "time (\u03BCs)": time_us,
-            "effective bandwidth (GiB/s)": effective_bandwidth
-        }
+        return {"cycles": avg_cycles, "time (\u03BCs)": time_us, "effective bandwidth (GiB/s)": effective_bandwidth}
 
 
 class Benchmark(torch.nn.Module):
-
     def __init__(self, operator: Callable, num_repeats: int) -> None:
         super().__init__()
         self.num_repeats = num_repeats
         self.operator = operator
 
     def forward(self):
-        out = poptorch.for_loop(self.num_repeats, self.operator, 
-                                self.operator.loop_inputs())[-1]
+        out = poptorch.for_loop(self.num_repeats, self.operator, self.operator.loop_inputs())[-1]
         return torch.sum(out)
 
 
@@ -106,7 +89,7 @@ def read_precomputed_benchmarks(operation):
     a = pd.read_csv(f'precomputed_results/gpu/{operation}.csv')
     b = pd.read_csv(f'precomputed_results/ipu/{operation}.csv').reset_index()
 
-    b_time =  b['time (μs)']
+    b_time = b['time (μs)']
     b_time = b_time.rename('IPU time (μs)')
     a_time = a['time'].rename('A100 GPU time (μs)')
 
@@ -115,31 +98,49 @@ def read_precomputed_benchmarks(operation):
 
     return pd.concat([a[['num_inputs', 'num_features', 'num_outputs']], a_time, b_time, speedup], axis=1)
 
+
 def quick_benchmarks_3d(operation, yaw=120):
     def draw_plot(df, axes, plot_type, operation, yaw):
-        cvals  = [2**i for i in range(5)]
-        colors = ["#0068AA","#B5E4EB", "#FBE8AA", "#FBC3AA", "#FF6F79"]
-        gc_norm=plt.Normalize(min(cvals),max(cvals))
-        tuples = list(zip(map(gc_norm,cvals), colors))
+        cvals = [2**i for i in range(5)]
+        colors = ["#0068AA", "#B5E4EB", "#FBE8AA", "#FBC3AA", "#FF6F79"]
+        gc_norm = plt.Normalize(min(cvals), max(cvals))
+        tuples = list(zip(map(gc_norm, cvals), colors))
         gc_cmap = cplt.LinearSegmentedColormap.from_list("", tuples)
-        
+
         z_label = ''
-        
-        x = np.log2(df['num_inputs'])
-        y = np.log2(df['num_outputs'])
-        speedup = df['speedup']
-        kw = {'cmap':gc_cmap, 'norm':gc_norm, 'edgecolors': 'k', 'linewidth': .2, 'aa': 4} 
+
         if plot_type == 'trisurf':
             # IPU
-            axes.plot_trisurf(x, y, speedup, **kw)
+            axes.plot_trisurf(
+                np.log2(df['num_inputs']), np.log2(df['num_outputs']), df['speedup'], cmap=gc_cmap, norm=gc_norm
+            )
             # baseline
-            axes.plot_trisurf(x, y, np.ones_like(speedup), **kw)
+            axes.plot_trisurf(
+                np.log2(df['num_inputs']),
+                np.log2(df['num_outputs']),
+                np.ones_like(df['speedup']),
+                cmap=gc_cmap,
+                norm=gc_norm,
+            )
             z_label = 'Avg Speedup vs A100 ---->'
         elif plot_type == 'scatter3D':
             # IPU
-            s = axes.scatter3D(x, y, speedup, c=speedup, **kw)
+            s = axes.scatter3D(
+                np.log2(df['num_inputs']),
+                np.log2(df['num_outputs']),
+                df['speedup'],
+                c=df['speedup'],
+                cmap=gc_cmap,
+                norm=gc_norm,
+            )
             # baseline
-            axes.plot_trisurf(x, y, np.ones_like(speedup), **kw)
+            axes.plot_trisurf(
+                np.log2(df['num_inputs']),
+                np.log2(df['num_outputs']),
+                np.ones_like(df['speedup']),
+                cmap=gc_cmap,
+                norm=gc_norm,
+            )
             z_label = 'Speedup vs A100 ---->'
         else:
             print('Unsupported plot type.')
@@ -153,18 +154,17 @@ def quick_benchmarks_3d(operation, yaw=120):
         axes.set_zlabel(z_label, fontsize=7, labelpad=-25)
         axes.set_zticks([2**i for i in range(5)])
         axes.set_zticklabels([f'{2**i}x' for i in range(5)])
-        axes.set_facecolor("#FFF")
+        axes.set_facecolor("#FAF8F9")
         axes.margins(0.0)
 
         axes.view_init(10, yaw)
-        
+
     df = read_precomputed_benchmarks(operation)
     df.insert(0, '', '')
-    
-    fig = plt.figure(figsize=(9,4),dpi=300)
+
+    fig = plt.figure(figsize=(12, 6))
     ax = fig.add_subplot(1, 2, 1, projection='3d')
     draw_plot(df, axes=ax, plot_type='scatter3D', operation=operation, yaw=yaw)
-    df_smooth = df.groupby(['num_inputs', 'num_outputs']).mean(numeric_only=True).reset_index() # avg feats
+    df_smooth = df.groupby(['num_inputs', 'num_outputs']).mean(numeric_only=True).reset_index()  # avg feats
     ax = fig.add_subplot(1, 2, 2, projection='3d')
     draw_plot(df_smooth, axes=ax, plot_type='trisurf', operation=operation, yaw=yaw)
-    

@@ -15,7 +15,7 @@ on:
         type: string
         description: "Docker image used in notebook testing"
         required: false
-        default: "graphcore/pytorch-geometric-jupyter:3.2.1-ubuntu-20.04-20230531"
+        default: "localhost:5000/graphcore/pytorch-geometric-paperspace:3.3.0"
       notebooks:
         type: string
         description: "List of notebooks to test in JSON format"
@@ -45,7 +45,7 @@ jobs:
   tests:
     uses: graphcore/paperspace-automation/.github/workflows/subwf-vpod-tests-for-nb-repo.yml@main
     with:
-      docker_image: ${{ inputs.docker_image || 'graphcore/pytorch-geometric-jupyter:3.2.1-ubuntu-20.04-20230531' }}
+      docker_image: ${{ inputs.docker_image || 'localhost:5000/graphcore/pytorch-geometric-paperspace:3.3.0' }}
       notebooks: ${{ inputs.notebooks }}
       machine_types: ${{ inputs.machine_types }}
       test_env: ${{ inputs.test_env || 'Local' }}

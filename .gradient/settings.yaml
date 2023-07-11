@@ -2,9 +2,9 @@ integrations:
   gcl:
     type: dataset
     ref: paperspace/ds7me5hgjbfht6q:8ngwr2a
-  poplar-executables-pyg-3-2:
+  poplar-executables-pyg-3-3:
     type: dataset
-    ref: paperspace/dspwpjouwm2zksi:z4gdua6
+    ref: paperspace/dsy367uk04fig95:xcr4ic3
   pyg-cora:
     type: dataset
     ref: paperspace/dsndie6bvzw7x8n:tblwlb4
@@ -20,3 +20,6 @@ integrations:
   pyg-tudataset:
     type: dataset
     ref: paperspace/dsdvyj7m0szchzc:pnuu29n
+  ieee-fraud-detection:
+    type: dataset
+    ref: paperspace/ds3e21z7ahi4a71:m6nek8x

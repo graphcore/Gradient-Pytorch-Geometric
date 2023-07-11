@@ -1,0 +1,193 @@
+# Copyright (c) 2022 Graphcore Ltd. All rights reserved.
+
+_common_source_repository: &_common_source_repository
+  origin: git@github.com:graphcore/examples-internal.git
+  ref: sdk-release-3.3.0
+
+_common_target_repository: &_common_target_repository
+  origin: notebooks/
+  ref: null
+
+
+pyg-cluster-GCN:
+  source:
+    paths:
+    - path: gnn/cluster_gcn/pytorch_geometric/node_classification_with_cluster_gcn.ipynb
+    - path: gnn/cluster_gcn/pytorch_geometric/requirements.txt
+    repository:
+      <<: *_common_source_repository
+      prefix: gnn/cluster_gcn/pytorch_geometric
+  target:
+    renames: {node-prediction/node_classification_with_cluster_gcn.ipynb: node-prediction/cluster_gcn_training.ipynb}
+    repository:
+      <<: *_common_target_repository
+      prefix: node-prediction
+
+
+pyg-message-passing:
+  source:
+    paths:
+    - path: gnn/message_passing/pytorch_geometric/molecular_property_prediction_with_gin.ipynb
+    - path: gnn/message_passing/pytorch_geometric/model.py
+    - path: gnn/message_passing/pytorch_geometric/requirements.txt
+    repository:
+      <<: *_common_source_repository
+      prefix: gnn/message_passing/pytorch_geometric
+  target:
+    renames: {graph-prediction/gin-molecular-prediction/molecular_property_prediction_with_gin.ipynb: graph-prediction/gin-molecular-prediction/gin_training.ipynb}
+    repository:
+      <<: *_common_target_repository
+      prefix: graph-prediction/gin-molecular-prediction/
+
+pyg-schnet:
+  source:
+    paths:
+    - path: gnn/schnet/pytorch_geometric/molecular_property_prediction_with_schnet.ipynb
+    - path: gnn/schnet/pytorch_geometric/utils.py
+    - path: gnn/schnet/pytorch_geometric/requirements.txt
+    repository:
+      <<: *_common_source_repository
+      prefix: gnn/schnet/pytorch_geometric/
+  target:
+    renames: {graph-prediction/schnet-molecular-prediction/molecular_property_prediction_with_schnet.ipynb: graph-prediction/schnet-molecular-prediction/schnet_training.ipynb }
+    repository:
+      <<: *_common_target_repository
+      prefix: graph-prediction/schnet-molecular-prediction/
+
+pyg-tgn:
+  source:
+    paths:
+    - expression: '*'
+      path: gnn/tgn/pytorch
+      recursive: true
+    excludes:
+    - path: gnn/tgn/pytorch/README.md
+    - path: gnn/tgn/pytorch/.gitignore
+    - expression: '*'
+      path: gnn/tgn/pytorch/.ci
+      recursive: true
+    repository:
+      <<: *_common_source_repository
+      prefix: gnn/tgn/pytorch
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: link-prediction/temporal-graph-networks
+
+pyg-nbfnet-notebook:
+  source:
+    paths:
+    - path: gnn/nbfnet/pytorch_geometric/NBFNet_training.ipynb
+    - path: gnn/nbfnet/pytorch_geometric/requirements.txt
+    repository:
+      <<: *_common_source_repository
+      prefix: gnn/nbfnet/pytorch_geometric
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: link-prediction/NBFNet-for-knowledge-graphs/
+
+pyg-nbfnet-code:
+  source:
+    paths:
+    - expression: '*'
+      path: gnn/nbfnet/pytorch_geometric
+      recursive: true
+    excludes:
+    - path: gnn/nbfnet/pytorch_geometric/NBFNet_training.ipynb
+    - expression: '*'
+      path: gnn/nbfnet/pytorch_geometric/.ci
+      recursive: true
+    repository:
+      <<: *_common_source_repository
+      prefix: gnn/nbfnet/pytorch_geometric
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: link-prediction/NBFNet-for-knowledge-graphs/nbfnet_utils/
+
+# BENCHMARK
+pyg-benchmark:
+  source:
+    paths:
+    - expression: '*'
+      path: benchmarks/
+      recursive: true
+    repository:
+      origin: https://github.com/graphcore/poppyg.git
+      ref: adams/benchmark_gather_scatter
+      prefix: benchmarks/
+  target:
+    renames: {benchmarks/benchmarking_message_passing_on_the_ipu.ipynb: benchmarks/benchmarking_gnn_on_ipus.ipynb}
+    repository:
+      <<: *_common_target_repository
+      prefix: ipu-speed-advantage/
+
+# tutorials
+pyg-1_at_a_glance:
+  source:
+    paths:
+    - path: tutorials/tutorials/pytorch_geometric/1_at_a_glance/1_at_a_glance.ipynb
+    repository:
+      <<: *_common_source_repository
+      prefix: tutorials/tutorials/pytorch_geometric/1_at_a_glance/
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: learning-pytorch-geometric-on-ipus/
+
+pyg-2_a_worked_example:
+  source:
+    paths:
+    - path: tutorials/tutorials/pytorch_geometric/2_a_worked_example/2_a_worked_example.ipynb
+    repository:
+      <<: *_common_source_repository
+      prefix: tutorials/tutorials/pytorch_geometric/2_a_worked_example/
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: learning-pytorch-geometric-on-ipus/
+
+pyg-3_small_graph_batching_with_padding:
+  source:
+    paths:
+    - path: tutorials/tutorials/pytorch_geometric/3_small_graph_batching_with_padding/3_small_graph_batching_with_padding.ipynb
+    repository:
+      <<: *_common_source_repository
+      prefix: tutorials/tutorials/pytorch_geometric/3_small_graph_batching_with_padding/
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: learning-pytorch-geometric-on-ipus/
+
+pyg-4_small_graph_batching_with_packing:
+  source:
+    paths:
+    - path: tutorials/tutorials/pytorch_geometric/4_small_graph_batching_with_packing/4_small_graph_batching_with_packing.ipynb
+    repository:
+      <<: *_common_source_repository
+      prefix: tutorials/tutorials/pytorch_geometric/4_small_graph_batching_with_packing/
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: learning-pytorch-geometric-on-ipus/
+
+pyg-tutorial-requirements:
+  source:
+    paths:
+    - path: tutorials/tutorials/pytorch_geometric/requirements.txt
+    repository:
+      <<: *_common_source_repository
+      prefix: tutorials/tutorials/pytorch_geometric/
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: learning-pytorch-geometric-on-ipus/
