@@ -7,4 +7,4 @@ pytest~=6.2
 pytest-pythonpath==0.7.3
 pytest-forked~=1.4
 pytest-xdist~=2.5
-examples-utils[benchmark] @ git+https://github.com/graphcore/examples-utils@v3.4
+graphcore-cloud-tools[logger] @ git+https://github.com/graphcore/graphcore-cloud-tools
