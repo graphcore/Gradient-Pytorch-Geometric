@@ -94,7 +94,7 @@ pyg-tut6:
 
 # MolFeat
 molfeat:
-  location: ../archive/molfeat
+  location: ../experimental/molfeat
   generated: true
   notebook:
     file: pytorch_geometric_molfeat.ipynb
@@ -102,7 +102,7 @@ molfeat:
 
 # Graphium
 graphium:
-  location: ../archive/graphium
+  location: ../experimental/graphium
   generated: true
   notebook:
     file: running-multitask-ipu.ipynb

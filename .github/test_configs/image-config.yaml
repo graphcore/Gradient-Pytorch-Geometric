@@ -1,2 +1,5 @@
 default:
   test_names: []
+
+sdk-3.2.1:
+  test_names: ['graphium','molfeat']
