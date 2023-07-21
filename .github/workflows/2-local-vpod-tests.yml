@@ -38,7 +38,7 @@ on:
   pull_request:
   schedule:
     # run at 7:00 PM GMT every night
-    - cron:  '0 19 * * WED,FRI'
+    - cron:  '0 19 * * *'
 
 
 jobs:
