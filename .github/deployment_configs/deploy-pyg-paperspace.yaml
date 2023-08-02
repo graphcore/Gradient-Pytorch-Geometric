@@ -1,8 +1,8 @@
 # Copyright (c) 2022 Graphcore Ltd. All rights reserved.
 
-_common_source_repository: &_common_source_repository
-  origin: git@github.com:graphcore/examples-internal.git
-  ref: sdk-release-3.3.0
+_examples_internal_repository: &_examples_internal_repository
+  origin: examples-internal/
+  ref: null
 
 _common_target_repository: &_common_target_repository
   origin: notebooks/
@@ -15,7 +15,7 @@ pyg-cluster-GCN:
     - path: gnn/cluster_gcn/pytorch_geometric/node_classification_with_cluster_gcn.ipynb
     - path: gnn/cluster_gcn/pytorch_geometric/requirements.txt
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: gnn/cluster_gcn/pytorch_geometric
   target:
     renames: {node-prediction/node_classification_with_cluster_gcn.ipynb: node-prediction/cluster_gcn_training.ipynb}
@@ -31,7 +31,7 @@ pyg-message-passing:
     - path: gnn/message_passing/pytorch_geometric/model.py
     - path: gnn/message_passing/pytorch_geometric/requirements.txt
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: gnn/message_passing/pytorch_geometric
   target:
     renames: {graph-prediction/gin-molecular-prediction/molecular_property_prediction_with_gin.ipynb: graph-prediction/gin-molecular-prediction/gin_training.ipynb}
@@ -46,7 +46,7 @@ pyg-schnet:
     - path: gnn/schnet/pytorch_geometric/utils.py
     - path: gnn/schnet/pytorch_geometric/requirements.txt
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: gnn/schnet/pytorch_geometric/
   target:
     renames: {graph-prediction/schnet-molecular-prediction/molecular_property_prediction_with_schnet.ipynb: graph-prediction/schnet-molecular-prediction/schnet_training.ipynb }
@@ -67,7 +67,7 @@ pyg-tgn:
       path: gnn/tgn/pytorch/.ci
       recursive: true
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: gnn/tgn/pytorch
   target:
     renames: {}
@@ -81,7 +81,7 @@ pyg-nbfnet-notebook:
     - path: gnn/nbfnet/pytorch_geometric/NBFNet_training.ipynb
     - path: gnn/nbfnet/pytorch_geometric/requirements.txt
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: gnn/nbfnet/pytorch_geometric
   target:
     renames: {}
@@ -101,7 +101,7 @@ pyg-nbfnet-code:
       path: gnn/nbfnet/pytorch_geometric/.ci
       recursive: true
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: gnn/nbfnet/pytorch_geometric
   target:
     renames: {}
@@ -109,22 +109,28 @@ pyg-nbfnet-code:
       <<: *_common_target_repository
       prefix: link-prediction/NBFNet-for-knowledge-graphs/nbfnet_utils/
 
-# BENCHMARK
-pyg-benchmark:
+pyg-fraud-detection:
   source:
     paths:
     - expression: '*'
-      path: benchmarks/
+      path: gnn/fraud_detection/pytorch_geometric
+      recursive: true
+    excludes:
+    - path: gnn/fraud_detection/pytorch_geometric/README.md
+    - expression: '*'
+      path: gnn/fraud_detection/pytorch_geometric/.ci
+      recursive: true
+    - expression: '*'
+      path: gnn/fraud_detection/pytorch_geometric/test
       recursive: true
     repository:
-      origin: https://github.com/graphcore/poppyg.git
-      ref: adams/benchmark_gather_scatter
-      prefix: benchmarks/
+      <<: *_examples_internal_repository
+      prefix: gnn/fraud_detection/pytorch_geometric
   target:
-    renames: {benchmarks/benchmarking_message_passing_on_the_ipu.ipynb: benchmarks/benchmarking_gnn_on_ipus.ipynb}
+    renames: {}
     repository:
       <<: *_common_target_repository
-      prefix: ipu-speed-advantage/
+      prefix: fraud-detection
 
 # tutorials
 pyg-1_at_a_glance:
@@ -132,7 +138,7 @@ pyg-1_at_a_glance:
     paths:
     - path: tutorials/tutorials/pytorch_geometric/1_at_a_glance/1_at_a_glance.ipynb
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: tutorials/tutorials/pytorch_geometric/1_at_a_glance/
   target:
     renames: {}
@@ -145,7 +151,7 @@ pyg-2_a_worked_example:
     paths:
     - path: tutorials/tutorials/pytorch_geometric/2_a_worked_example/2_a_worked_example.ipynb
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: tutorials/tutorials/pytorch_geometric/2_a_worked_example/
   target:
     renames: {}
@@ -158,7 +164,7 @@ pyg-3_small_graph_batching_with_padding:
     paths:
     - path: tutorials/tutorials/pytorch_geometric/3_small_graph_batching_with_padding/3_small_graph_batching_with_padding.ipynb
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: tutorials/tutorials/pytorch_geometric/3_small_graph_batching_with_padding/
   target:
     renames: {}
@@ -171,8 +177,34 @@ pyg-4_small_graph_batching_with_packing:
     paths:
     - path: tutorials/tutorials/pytorch_geometric/4_small_graph_batching_with_packing/4_small_graph_batching_with_packing.ipynb
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: tutorials/tutorials/pytorch_geometric/4_small_graph_batching_with_packing/
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: learning-pytorch-geometric-on-ipus/
+
+pyg-5_large_graph_sampling:
+  source:
+    paths:
+    - path: tutorials/tutorials/pytorch_geometric/5_large_graph_sampling/5_large_graph_sampling.ipynb
+    repository:
+      <<: *_examples_internal_repository
+      prefix: tutorials/tutorials/pytorch_geometric/5_large_graph_sampling/
+  target:
+    renames: {}
+    repository:
+      <<: *_common_target_repository
+      prefix: learning-pytorch-geometric-on-ipus/
+
+pyg-6_heterogeneous_graphs:
+  source:
+    paths:
+    - path: tutorials/tutorials/pytorch_geometric/6_heterogeneous_graphs/6_heterogeneous_graphs.ipynb
+    repository:
+      <<: *_examples_internal_repository
+      prefix: tutorials/tutorials/pytorch_geometric/6_heterogeneous_graphs/
   target:
     renames: {}
     repository:
@@ -184,7 +216,7 @@ pyg-tutorial-requirements:
     paths:
     - path: tutorials/tutorials/pytorch_geometric/requirements.txt
     repository:
-      <<: *_common_source_repository
+      <<: *_examples_internal_repository
       prefix: tutorials/tutorials/pytorch_geometric/
   target:
     renames: {}
