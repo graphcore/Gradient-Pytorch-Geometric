@@ -1,8 +1,8 @@
 --find-links https://data.pyg.org/whl/torch-2.0.1+cpu.html
 
-matplotlib==3.7.1
-numpy==1.24.2
-pandas==1.5.3
+matplotlib
+numpy
+pandas
 pytest==6.2.5
 torch-geometric==2.2.0
 torch-scatter==2.1.1+pt20cpu
