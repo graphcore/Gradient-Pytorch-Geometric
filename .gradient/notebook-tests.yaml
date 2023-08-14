@@ -127,4 +127,4 @@ fraud-detection-2:
   generated: true
   notebook:
     file: 2_training.ipynb
-    timeout: 1800
+    timeout: 3600
