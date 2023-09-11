@@ -7,6 +7,8 @@ Graphcore-Pytorch-Geometric-README_first:
 
 pyg-cluster-GCN:
   location: ../node-prediction
+  paperspace-automation-ext:
+    watch-files: [requirements.txt]
   generated: true
   notebook:
     file: cluster_gcn_training.ipynb
@@ -14,6 +16,8 @@ pyg-cluster-GCN:
 
 pyg-message-passing:
   location: ../graph-prediction/gin-molecular-prediction
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, model.py]
   generated: true
   notebook:
     file: gin_training.ipynb
@@ -21,6 +25,8 @@ pyg-message-passing:
 
 pyg-schnet:
   location: ../graph-prediction/schnet-molecular-prediction
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, utils.py]
   generated: true
   notebook:
     file: schnet_training.ipynb
@@ -28,6 +34,8 @@ pyg-schnet:
 
 pyg-tgn:
   location: ../link-prediction/temporal-graph-networks
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, "*.py", "*.yml"]
   generated: true
   notebook:
     file: Train_TGN.ipynb
@@ -35,6 +43,8 @@ pyg-tgn:
 
 pyg-nbfnet:
   location: ../link-prediction/NBFNet-for-knowledge-graphs
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, "**/*.py", "*.yaml"]
   generated: true
   notebook:
     file: NBFNet_training.ipynb
@@ -42,6 +52,8 @@ pyg-nbfnet:
 
 pyg-ipu-speed-advantage:
   location: ../ipu-speed-advantage
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, "*.py", "*.csv"]
   generated: true
   notebook:
     file: benchmarking_gnn_on_ipus.ipynb
@@ -51,6 +63,8 @@ pyg-ipu-speed-advantage:
 
 pyg-tut1:
   location: ../learning-pytorch-geometric-on-ipus
+  paperspace-automation-ext:
+    watch-files: [requirements.txt]
   generated: true
   notebook:
     file: 1_at_a_glance.ipynb
@@ -58,6 +72,8 @@ pyg-tut1:
 
 pyg-tut2:
   location: ../learning-pytorch-geometric-on-ipus
+  paperspace-automation-ext:
+    watch-files: [requirements.txt]
   generated: true
   notebook:
     file: 2_a_worked_example.ipynb
@@ -65,6 +81,8 @@ pyg-tut2:
 
 pyg-tut3:
   location: ../learning-pytorch-geometric-on-ipus
+  paperspace-automation-ext:
+    watch-files: [requirements.txt]
   generated: true
   notebook:
     file: 3_small_graph_batching_with_padding.ipynb
@@ -72,6 +90,8 @@ pyg-tut3:
 
 pyg-tut4:
   location: ../learning-pytorch-geometric-on-ipus
+  paperspace-automation-ext:
+    watch-files: [requirements.txt]
   generated: true
   notebook:
     file: 4_small_graph_batching_with_packing.ipynb
@@ -79,6 +99,8 @@ pyg-tut4:
 
 pyg-tut5:
   location: ../learning-pytorch-geometric-on-ipus
+  paperspace-automation-ext:
+    watch-files: [requirements.txt]
   generated: true
   notebook:
     file: 5_large_graph_sampling.ipynb
@@ -86,6 +108,8 @@ pyg-tut5:
 
 pyg-tut6:
   location: ../learning-pytorch-geometric-on-ipus
+  paperspace-automation-ext:
+    watch-files: [requirements.txt]
   generated: true
   notebook:
     file: 6_heterogeneous_graphs.ipynb
@@ -95,6 +119,8 @@ pyg-tut6:
 # MolFeat
 molfeat:
   location: ../experimental/molfeat
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, utils.py]
   generated: true
   notebook:
     file: pytorch_geometric_molfeat.ipynb
@@ -103,6 +129,8 @@ molfeat:
 # Graphium
 graphium:
   location: ../experimental/graphium
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, "*.yaml"]
   generated: true
   notebook:
     file: running-multitask-ipu.ipynb
@@ -117,6 +145,8 @@ useful-managing-ipu-resources:
 
 fraud-detection-1:
   location: ../fraud-detection
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, "*.py"]
   generated: true
   notebook:
     file: 1_dataset_preprocessing.ipynb
@@ -124,6 +154,8 @@ fraud-detection-1:
 
 fraud-detection-2:
   location: ../fraud-detection
+  paperspace-automation-ext:
+    watch-files: [requirements.txt, "*.py"]
   generated: true
   notebook:
     file: 2_training.ipynb
