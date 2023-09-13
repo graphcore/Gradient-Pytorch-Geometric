@@ -8,4 +8,4 @@ torch-geometric==2.2.0
 torch-scatter==2.1.1+pt20cpu
 torch-sparse==0.6.17+pt20cpu
 tqdm==4.60.0
-graphcore-cloud-tools[logger] @ git+https://github.com/graphcore/graphcore-cloud-tools
+graphcore-cloud-tools[logger] @ git+https://github.com/graphcore/graphcore-cloud-tools@v0.3

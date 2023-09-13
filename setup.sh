@@ -59,6 +59,7 @@ export POPTORCH_CACHE_DIR="${POPLAR_EXECUTABLE_CACHE_DIR}"
 export POPART_CACHE_DIR="${POPLAR_EXECUTABLE_CACHE_DIR}"
 
 export PUBLIC_DATASETS_DIR="/datasets"
+export S3_DATASETS_DIR="/graphcore-gradient-datasets"
 export POPTORCH_LOG_LEVEL=ERR
 export RDMAV_FORK_SAFE=1
 export POPART_PRELOAD_POPEF="full-preload"

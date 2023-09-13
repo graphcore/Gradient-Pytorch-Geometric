@@ -1,9 +1,9 @@
 {
-    "${POPLAR_EXECUTABLE_CACHE_DIR}":["${PUBLIC_DATASETS_DIR}/poplar-executables-pyg-3-3/${SDK_VERSION}"],
-    "${DATASETS_DIR}/Cora":["${PUBLIC_DATASETS_DIR}/pyg-cora"],
-    "${DATASETS_DIR}/FB15k-237":["${PUBLIC_DATASETS_DIR}/pyg-fb15k-237"],
-    "${DATASETS_DIR}/qm9":["${PUBLIC_DATASETS_DIR}/pyg-qm9"],
-    "${DATASETS_DIR}/Reddit":["${PUBLIC_DATASETS_DIR}/pyg-reddit"],
-    "${DATASETS_DIR}/TUDataset":["${PUBLIC_DATASETS_DIR}/pyg-tudataset"],
-    "${DATASETS_DIR}/ieee-fraud-detection":["${PUBLIC_DATASETS_DIR}/ieee-fraud-detection"]
+    "${POPLAR_EXECUTABLE_CACHE_DIR}":["${S3_DATASETS_DIR}/poplar-executables-pyg-3-3/${SDK_VERSION}"],
+    "${DATASETS_DIR}/Cora":["${S3_DATASETS_DIR}/pyg-cora"],
+    "${DATASETS_DIR}/FB15k-237":["${S3_DATASETS_DIR}/pyg-fb15k-237"],
+    "${DATASETS_DIR}/qm9":["${S3_DATASETS_DIR}/pyg-qm9"],
+    "${DATASETS_DIR}/Reddit":["${S3_DATASETS_DIR}/pyg-reddit"],
+    "${DATASETS_DIR}/TUDataset":["${S3_DATASETS_DIR}/pyg-tudataset"],
+    "${DATASETS_DIR}/ieee-fraud-detection":["${S3_DATASETS_DIR}/ieee-fraud-detection"]
 }
